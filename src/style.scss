@@ -1,0 +1,152 @@
+@import url('https://fonts.googleapis.com/css?family=Montserrat:400,500,600&display=swap&subset=cyrillic');
+
+*{
+  padding: 0px; 
+  border-width: 0px;
+  font-family: 'Montserrat', sans-serif;
+  box-sizing: border-box;
+}
+body{
+  width: 100%;
+  height: 100%;
+  background-image: url("C:\\Users\\Denis\\Desktop\\test\\src\\christiane-nuetzel-dDTaJmKVl4o-unsplash-min.jpg");
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-attachment: fixed;
+  background-size: cover;
+}
+.logo{
+  width: 130px;
+  height: 61px;
+  margin-top: 70px;
+  margin-left: 10px;
+}
+*:focus
+{
+  outline: none;
+}
+#page{
+  width: 1100px; 
+  height: 100%;
+  margin:0 auto;
+}
+#search{
+  width: 800px; 
+  height: 60px; 
+  margin:200px auto 0px; 
+  background-color: rgb(115, 78, 78); 
+  border-radius: 0px 30px 30px 30px;
+}
+#cityField{
+  width: 700px; 
+  height: 60px;
+  font-size: 25px;
+  float: left; 
+  margin: 0px 0px 0px 28px; 
+  font-weight: 500; 
+  color: rgb(255, 231, 231); 
+  background-color: transparent;
+}
+#searchButton{
+  width:72px; 
+  height: 60px; 
+  float: left; 
+  border-radius: 0px 30px 30px 0px;
+  background-color: rgba(30, 30, 29, 0.3); 
+  cursor: pointer;
+}
+#weatherBlock{
+  width: 744px; 
+  height: 300px; 
+  background-color: rgba(30, 30, 29, 0.7);
+  margin: 40px auto 0px; 
+  border-radius: 15px;
+}
+#leftBlock{
+  width: 643px; 
+  height: 300px; 
+  float: left;
+}
+#middleBlock{
+  width: 600px; 
+  height: 180px; 
+  margin: 60px 0 60px 43px;
+}
+#weatherIcon{
+  width: 187px; 
+  height: 180px; 
+  float: left;
+}
+#verticalLine{
+  width: 1px; 
+  height: 180px; 
+  float: left; 
+  border:rgba(30, 30, 29, 0.7) solid 1.5px;
+}
+#tabContent{
+  width: 370px; 
+  height: 180px;
+  float: left; 
+  margin-left: 40px; 
+  font-weight: 600; 
+  color: #FFF3F3;
+}
+#cityName{
+  width: 100%; 
+  height: 40px; 
+  font-size: 35px;
+}
+#tabName{
+  width: 100%; 
+  height: 30px; 
+  font-size: 24px;
+}
+#result{
+  width: 100%; 
+  height: 70px; 
+  margin-top: 10px; 
+  font-size: 61px;
+}
+#unit{
+  width: 100%; 
+  height: 30px; 
+  font-size: 27px;
+}
+#rightBlock{
+  width: 101px; 
+  height: 300px;
+  float: left;
+}
+#tab1{
+  border-radius: 0 15px 0 0;
+}
+#tab5{
+  border-radius: 0 0 15px 0;
+}
+#tab1Icon{
+  margin: 11px 41px;
+}
+#tab2Icon{
+  margin: 20px 31px;
+}
+#tab3Icon{
+  margin: 14px 38px;
+}
+#tab4Icon{
+  margin: 13px 31px;
+}
+#tab5Icon{
+  margin: 12px 32px;
+}
+.tab{
+  display: inline-block;
+  background-color: rgba(30, 30, 29, 0.7);
+  box-shadow: 1px 1px 0 #1b1b1b inset;
+  width: 100%; height: 60px;
+  cursor: pointer;
+}
+.active-tab{
+  background-color: transparent;
+  box-shadow: none;
+  cursor: default;
+}

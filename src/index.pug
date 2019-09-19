@@ -1,0 +1,45 @@
+doctype html
+html(lang="en")
+  head
+    meta( charset="UTF-8")
+    title WeatherSearch
+    script(src="https://unpkg.com/axios/dist/axios.min.js")
+    style 
+      include style.scss
+  body
+    #page
+      include svg/Logo.svg
+      #search
+        form(action="#")
+          input#cityField(type="text")
+          button#searchButton
+            include svg/magnifying-glass.svg
+      #weatherBlock
+        #leftBlock
+          #middleBlock
+            #weatherIcon
+              include svg/day-rain.svg
+            #verticalLine
+            #tabContent
+              #cityName
+              #tabName
+              #result
+              #unit
+        #rightBlock
+          #tab1(class="tab active-tab")
+            #tab1Icon
+              include svg/temp.svg
+          .tab#tab2
+            #tab2Icon
+              include svg/wind.svg
+          .tab#tab3
+            #tab3Icon
+              include svg/humidity.svg
+          .tab#tab4
+            #tab4Icon
+              include svg/sunset.svg
+          .tab#tab5
+            #tab5Icon
+              include svg/vect.svg
+    script
+      include main.js
