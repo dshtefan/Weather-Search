@@ -8,7 +8,8 @@ html(lang="en")
       include style.scss
   body
     #page
-      include svg/Logo.svg
+      #logo
+        include svg/Logo.svg
       #search
         form(action="#")
           input#cityField(type="text")
@@ -17,9 +18,6 @@ html(lang="en")
       #weatherBlock
         #leftBlock
           #middleBlock
-            #weatherIcon
-              include svg/day-rain.svg
-            #verticalLine
             #tabContent
               #cityName
               #tabName

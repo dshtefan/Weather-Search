@@ -1,6 +1,6 @@
 const getCity = () => {
-    let cityName = document.getElementById("cityField").value;
-    getWeather(cityName);
+    let cityName = document.getElementById("cityField").value
+    getWeather(cityName)
 }
 
 const openTab = i => {
@@ -54,14 +54,22 @@ const getWeather = cityName => {
     console.log(main)
   }).catch((err) => {
     console.log(err)
+    errorMessage(err.message)
   })
+}
+
+const errorMessage = (message) => {
+  document.getElementById(`cityName`).innerText = ``
+  document.getElementById(`result`).innerText = ``
+  document.getElementById(`unit`).innerText = ``
+  document.getElementById(`tabName`).innerText = message
 }
 
 let results = [[]]
 let kelvin = 273.15
-let APIkey = "d3fb6b0837add2d07e9d69ef97b85afd";
-let weather;
-let activeTab = 1;
+let APIkey = "d3fb6b0837add2d07e9d69ef97b85afd"
+let weather
+let activeTab = 1
 document.getElementById("searchButton").onclick = getCity
 let tabs = document.getElementsByClassName("tab")
 Array.prototype.slice.call(tabs).map((tab, i) => tab.onclick = () => openTab(i))
