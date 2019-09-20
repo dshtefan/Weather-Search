@@ -15,7 +15,6 @@ const openTab = i => {
 }
 
 const getWeather = cityName => {
-  console.log(cityName);
   axios.get('https://api.openweathermap.org/data/2.5/weather?', {
     params: {
       q: cityName,
@@ -24,9 +23,6 @@ const getWeather = cityName => {
   }).then((data) => {
     weather = data.data
     
-    console.log(data.data);
-    console.log((weather.main.temp - 273.15).toFixed(0));
-
     let city = weather.name
     let main = weather.weather[0].main
     let temp = (weather.main.temp - kelvin).toFixed(0) 
@@ -49,11 +45,10 @@ const getWeather = cityName => {
       [`Sunrise | Sunset`, `${getDate(sunrise)} | ${getDate(sunset)}`, ``],
       [`Pressure`, pressure, `hPa`]
     ]
+    unlockTabs()
     openTab(0)
-
-    console.log(main)
   }).catch((err) => {
-    console.log(err)
+    lockTabs()
     errorMessage(err.message)
   })
 }
@@ -65,6 +60,15 @@ const errorMessage = (message) => {
   document.getElementById(`tabName`).innerText = message
 }
 
+const lockTabs = () => {
+  openTab(0)
+  Array.prototype.slice.call(tabs).map((tab, i) => tab.onclick = () => {})
+}
+
+const unlockTabs = () => {
+  Array.prototype.slice.call(tabs).map((tab, i) => tab.onclick = () => openTab(i))
+}
+
 let results = [[]]
 let kelvin = 273.15
 let APIkey = "d3fb6b0837add2d07e9d69ef97b85afd"
@@ -72,4 +76,3 @@ let weather
 let activeTab = 1
 document.getElementById("searchButton").onclick = getCity
 let tabs = document.getElementsByClassName("tab")
-Array.prototype.slice.call(tabs).map((tab, i) => tab.onclick = () => openTab(i))
