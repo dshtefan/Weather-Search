@@ -9,7 +9,7 @@ html(lang="en")
   body
     #page
       #logo
-        include svg/Logo.svg
+        include svg/logo.svg
       #search
         form(action="#")
           input#cityField(type="text")
@@ -18,6 +18,8 @@ html(lang="en")
       #weatherBlock
         #leftBlock
           #middleBlock
+            #weatherIcon
+            #verticalLine
             #tabContent
               #cityName
               #tabName
@@ -26,18 +28,16 @@ html(lang="en")
         #rightBlock
           #tab1(class="tab active-tab")
             #tab1Icon
-              include svg/temp.svg
+              include svg/tab_icons/temp.svg
           .tab#tab2
             #tab2Icon
-              include svg/wind.svg
+              include svg/tab_icons/wind.svg
           .tab#tab3
             #tab3Icon
-              include svg/humidity.svg
+              include svg/tab_icons/humidity.svg
           .tab#tab4
             #tab4Icon
-              include svg/sunset.svg
+              include svg/tab_icons/sunset.svg
           .tab#tab5
             #tab5Icon
-              include svg/vect.svg
-    script
-      include main.js
+              include svg/tab_icons/pressure.svg
