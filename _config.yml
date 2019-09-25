@@ -1,6 +1,5 @@
 name: WeatherSearch
 source              : ./dist
-destination         : ./dist
 
 exclude:
   - README.md
