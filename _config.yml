@@ -1,3 +1,4 @@
+name: WeatherSearch
 source              : ./dist
 destination         : ./dist
 
