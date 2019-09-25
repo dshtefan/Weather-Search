@@ -1,2 +1,5 @@
 source              : .
 destination         : ./dist
+
+exclude:
+  - README.md
