@@ -97,5 +97,5 @@ let results = [[]],
     weather, 
     activeTab = 1, 
     tabs = document.getElementsByClassName(`tab`)
-el(`searchButton`).onclick = getCity
+el(`search-form`).addEventListener(`submit`, () => getCity())
 displayIcon(`none`)
