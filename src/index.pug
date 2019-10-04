@@ -9,7 +9,7 @@ html(lang="en")
       #logo
         include svg/logo.svg
       #search
-        form#search-form
+        form#search-form(onsubmit="return false;")
           input#cityField(type="text")
           button#searchButton
             include svg/search_btn.svg
