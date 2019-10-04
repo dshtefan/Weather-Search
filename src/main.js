@@ -1,3 +1,5 @@
+import './style.scss'
+
 const el = elId => document.getElementById(elId)
 
 const getCity = () => {
