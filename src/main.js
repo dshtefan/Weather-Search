@@ -1,28 +1,35 @@
 import './style.scss'
 
+const pug = require('pug'); //Здесь ошибка
+const template = pug.compileFile('template.pug');
+
 const el = elId => document.getElementById(elId)
 
-const getCity = () => {
-  let cityName = el(`cityField`).value
+const getCity = (event) => {
+  let cityName = event.target[0].value
   getWeather(cityName)
 }
 
 const openTab = i => {
   let currentActiveTab = el(`tab${activeTab}`),
       newActiveTab = el(`tab${i + 1}`)
-  currentActiveTab.classList.remove(`active-tab`)
-  newActiveTab.classList.add(`active-tab`)
+  currentActiveTab.classList.remove('active-tab')
+  newActiveTab.classList.add('active-tab')
   activeTab = i + 1
-  el(`cityName`).innerText = results[0][0]
-  el(`tabName`).innerText = results[i + 1][0]
-  el(`result`).innerText = results[i + 1][1]
-  el(`unit`).innerText = results[i + 1][2]
-  el(`weatherIcon`).innerHTML = `<img src="img/weather_icons/${results[i + 1][3]}.svg">`
-  displayIcon(``)
+  console.log(
+    template({
+      src: 'img/weather_icons/${results[i + 1][3]}.svg', 
+      city: results[0][0], 
+      tab: results[i + 1][0], 
+      res: results[i + 1][1], 
+      unit: results[i + 1][2]
+      }))
+
+  displayIcon('')
 }
 
 const getWeather = cityName => {
-  axios.get(`https://api.openweathermap.org/data/2.5/weather?`, {
+  axios.get('https://api.openweathermap.org/data/2.5/weather?', {
     params: {
       q: cityName,
       appid: APIkey
@@ -36,7 +43,7 @@ const getWeather = cityName => {
   .catch(err => {
     lockTabs()
     errorMessage(err.message)
-    displayIcon(`none`)
+    displayIcon('none')
   })
 }
 
@@ -59,18 +66,18 @@ const fillingWeatherInfo = weather => {
   results = [
     [city],
     [main, `${temp}°`, `${max_temp}° / ${min_temp}°`, icon],
-    [`Wind`, wind, `m / s`, `wind`],
-    [`Humidity`, `${humidity}%`, ``, `humidity`],
-    [`Sunrise | Sunset`, `${getDate(sunrise)} | ${getDate(sunset)}`, ``, `sunset`],
-    [`Pressure`, pressure, `hPa`, `pressure`]
+    ['Wind', wind, 'm / s', 'wind'],
+    ['Humidity', `${humidity}%`, '', 'humidity'],
+    ['Sunrise | Sunset', `${getDate(sunrise)} | ${getDate(sunset)}`, '', 'sunset'],
+    ['Pressure', pressure, 'hPa', 'pressure']
   ]
 }
 
 const errorMessage = message => {
-  el(`cityName`).innerText = ``
-  el(`result`).innerText = ``
-  el(`unit`).innerText = ``
-  el(`tabName`).innerText = message
+  el('cityName').innerText = ''
+  el('result').innerText = ''
+  el('unit').innerText = ''
+  el('tabName').innerText = message
 }
 
 const lockTabs = () => {
@@ -82,20 +89,20 @@ const unlockTabs = () =>
   Array.prototype.slice.call(tabs).map((tab, i) => tab.onclick = () => openTab(i))
 
 const displayIcon = mode => {
-  if (mode === `none`) {
-    el(`weatherIcon`).style.display = `none`
-    el(`verticalLine`).style.display = `none`
+  if (mode === 'none') {
+    el('weatherIcon').style.display = 'none'
+    el('verticalLine').style.display = 'none'
   } else {
-    el(`weatherIcon`).style.display = `block`
-    el(`verticalLine`).style.display = `block`
+    el('weatherIcon').style.display = 'block'
+    el('verticalLine').style.display = 'block'
   }
 }
 
 let results = [[]], 
     kelvin = 273.15, 
-    APIkey = `d3fb6b0837add2d07e9d69ef97b85afd`, 
+    APIkey = 'd3fb6b0837add2d07e9d69ef97b85afd', 
     weather, 
     activeTab = 1, 
-    tabs = document.getElementsByClassName(`tab`)
-el(`search-form`).addEventListener(`submit`, () => getCity())
-displayIcon(`none`)
+    tabs = document.getElementsByClassName('tab')
+el('search-form').addEventListener('submit', (event) => {getCity(event)})
+displayIcon('none')

@@ -9,6 +9,9 @@ module.exports = {
         path: path.resolve(__dirname, 'dist'),
         filename: 'main.js'
     },
+    node: {
+        fs: "empty"
+    },
     module: {
         rules: [
             {
@@ -27,16 +30,12 @@ module.exports = {
                     })
             },
             {
-                test: /\.pug$/,
+                test: /\.(pug)$/,
                 loader: 'pug-loader'
             },
             {
                 test: /\.(png|jpe?g|gif)$/i,
-                use: [
-                    {
-                        loader: 'file-loader',
-                    },
-                ],
+                loader: 'file-loader'
             }
         ]
     },
