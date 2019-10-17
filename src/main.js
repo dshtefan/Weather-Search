@@ -1,101 +1,123 @@
-import './style.scss'
+import './style.scss';
+import template from './template.pug';
+import axios from 'axios';
 
-const el = elId => document.getElementById(elId)
+const el = elId => document.getElementById(elId);
 
-const getCity = () => {
-  let cityName = el(`cityField`).value
-  getWeather(cityName)
-}
+const getCity = (event) => getWeather(event.target[0].value);
 
 const openTab = i => {
-  let currentActiveTab = el(`tab${activeTab}`),
-      newActiveTab = el(`tab${i + 1}`)
-  currentActiveTab.classList.remove(`active-tab`)
-  newActiveTab.classList.add(`active-tab`)
-  activeTab = i + 1
-  el(`cityName`).innerText = results[0][0]
-  el(`tabName`).innerText = results[i + 1][0]
-  el(`result`).innerText = results[i + 1][1]
-  el(`unit`).innerText = results[i + 1][2]
-  el(`weatherIcon`).innerHTML = `<img src="img/weather_icons/${results[i + 1][3]}.svg">`
-  displayIcon(``)
-}
+  let currentActiveTab = el(`tab${activeTab}`);
+  let newActiveTab = el(`tab${i + 1}`);
+  const templateParams = {
+    src: results[i + 1][3],
+    city: results[0][0],
+    tab: results[i + 1][0],
+    res: results[i + 1][1],
+    unit: results[i + 1][2]
+  };
+  currentActiveTab.classList.remove('active-tab');
+  newActiveTab.classList.add('active-tab');
+  activeTab = i + 1;
+  addTemplate(templateParams);
+};
 
 const getWeather = cityName => {
-  axios.get(`https://api.openweathermap.org/data/2.5/weather?`, {
+  axios.get('https://api.openweathermap.org/data/2.5/weather?', {
     params: {
       q: cityName,
       appid: APIkey
     }
   })
   .then(data => {
-    fillingWeatherInfo(data.data)
-    unlockTabs()
-    openTab(0)
+    fillingWeatherInfo(data.data);
+    unlockTabs();
+    openTab(0);
   })
   .catch(err => {
-    lockTabs()
-    errorMessage(err.message)
-    displayIcon(`none`)
+    lockTabs();
+    addTemplate('empty');
+    errorMessage(err.message);
+    displayIcon('none');
   })
-}
+};
+
+const getCls = (temp = 0) => (temp - kelvin).toFixed(0);
 
 const fillingWeatherInfo = weather => {
-  let city = weather.name, 
-      main = weather.weather[0].main, 
-      temp = (weather.main.temp - kelvin).toFixed(0), 
-      max_temp = (weather.main.temp_max - kelvin).toFixed(0), 
-      min_temp = (weather.main.temp_min - kelvin).toFixed(0), 
-      wind = weather.wind.speed, 
-      humidity = weather.main.humidity, 
-      sunrise = new Date(weather.sys.sunrise * 1000), 
-      sunset = new Date(weather.sys.sunset * 1000), 
-      pressure = weather.main.pressure, 
-      timezone = weather.timezone / 3600,
-      icon = weather.weather[0].icon.substr(0, 2)
+  let {
+    name,
+    main: { temp, temp_max, temp_min, humidity, pressure },
+    weather: {[0]: { main, icon }},
+    wind: { speed },
+    sys: { sunrise, sunset },
+    timezone
+  } = weather;
+  temp = getCls(temp);
+  temp_max = getCls(temp_max);
+  temp_min = getCls(temp_min);
+  sunrise = new Date(sunrise * 1000);
+  sunset = new Date(sunset * 1000);
+  timezone /= 3600;
+  icon = icon.substr(0, 2);
   const getDate = d => 
-    `${d.getUTCHours() + timezone}:${d.getUTCMinutes() + timezone}`
+    `${d.getUTCHours() + timezone}:${d.getUTCMinutes() + timezone}`;
   
   results = [
-    [city],
-    [main, `${temp}°`, `${max_temp}° / ${min_temp}°`, icon],
-    [`Wind`, wind, `m / s`, `wind`],
-    [`Humidity`, `${humidity}%`, ``, `humidity`],
-    [`Sunrise | Sunset`, `${getDate(sunrise)} | ${getDate(sunset)}`, ``, `sunset`],
-    [`Pressure`, pressure, `hPa`, `pressure`]
+    [name],
+    [main, `${temp}°`, `${temp_max}° / ${temp_min}°`, icon],
+    ['Wind', speed, 'm / s', 'wind'],
+    ['Humidity', `${humidity}%`, '', 'humidity'],
+    ['Sunrise | Sunset', `${getDate(sunrise)} | ${getDate(sunset)}`, '', 'sunset'],
+    ['Pressure', pressure, 'hPa', 'pressure']
   ]
-}
+};
 
-const errorMessage = message => {
-  el(`cityName`).innerText = ``
-  el(`result`).innerText = ``
-  el(`unit`).innerText = ``
-  el(`tabName`).innerText = message
-}
+const errorMessage = message => el('tabName').innerText = message;
 
 const lockTabs = () => {
-  openTab(0)
-  Array.prototype.slice.call(tabs).map((tab, i) => tab.onclick = () => {})
-}
+  openTab(0);
+  Array.prototype.slice.call(tabs).map((tab) => tab.onclick = () => {});
+};
 
 const unlockTabs = () => 
-  Array.prototype.slice.call(tabs).map((tab, i) => tab.onclick = () => openTab(i))
+  Array.prototype.slice.call(tabs).map((tab, i) => tab.onclick = () => openTab(i));
+
+const addTemplate = (data = 'empty') => {
+  if (data === 'empty')
+    el('middleBlock').innerHTML = template({
+      src: '',
+      city: '',
+      tab: '',
+      res: '',
+      unit: ''
+    });
+  else
+    el('middleBlock').innerHTML = template(data);
+};
 
 const displayIcon = mode => {
-  if (mode === `none`) {
-    el(`weatherIcon`).style.display = `none`
-    el(`verticalLine`).style.display = `none`
+  if (mode === 'none') {
+    el('weatherIcon').style.display = 'none';
+    el('verticalLine').style.display = 'none';
   } else {
-    el(`weatherIcon`).style.display = `block`
-    el(`verticalLine`).style.display = `block`
+    el('weatherIcon').style.display = 'block';
+    el('verticalLine').style.display = 'block';
   }
-}
+};
 
-let results = [[]], 
-    kelvin = 273.15, 
-    APIkey = `d3fb6b0837add2d07e9d69ef97b85afd`, 
-    weather, 
-    activeTab = 1, 
-    tabs = document.getElementsByClassName(`tab`)
-el(`search-form`).addEventListener(`submit`, () => getCity())
-displayIcon(`none`)
+let results =  [
+      [''],
+      ['', '', '', ''],
+      ['', '', '', ''],
+      ['', '', '', ''],
+      ['', '', '', ''],
+      ['', '', '', '']
+];
+let kelvin = 273.15;
+let APIkey = 'd3fb6b0837add2d07e9d69ef97b85afd';
+let activeTab = 1;
+let tabs = document.getElementsByClassName('tab');
+el('search-form').addEventListener('submit', getCity);
+addTemplate();
+displayIcon('none');
