@@ -1,5 +1,5 @@
 #weatherIcon
-  img(src='#{src}')
+  img(src=`img/weather_icons/${src === '' ? 'temp': src}.svg`)
 #verticalLine
 #tabContent
   #cityName #{city}
