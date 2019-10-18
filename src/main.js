@@ -4,9 +4,14 @@ import axios from 'axios';
 
 const el = elId => document.getElementById(elId);
 
-const getCity = (event) => getWeather(event.target[0].value);
+const getCity = (event) => {
+  event.preventDefault();
+  getWeather(event.target[0].value)
+    .then(data => preparingData(data.data))
+    .catch(err => preparingErrorMessage(err.message));
+};
 
-const openTab = i => {
+const openTab = (i, results) => {
   let currentActiveTab = el(`tab${activeTab}`);
   let newActiveTab = el(`tab${i + 1}`);
   const templateParams = {
@@ -22,29 +27,30 @@ const openTab = i => {
   addTemplate(templateParams);
 };
 
-const getWeather = cityName => {
+const preparingData = (data) => {
+  const cleanData = weatherDataDestructuring(data);
+  unlockTabs(cleanData);
+  openTab(0, cleanData);
+};
+
+const preparingErrorMessage = (message) => {
+  lockTabs();
+  addTemplate('empty');
+  errorMessage(message);
+  displayIcon('none');
+};
+
+const getWeather = (cityName) =>
   axios.get('https://api.openweathermap.org/data/2.5/weather?', {
     params: {
       q: cityName,
       appid: APIkey
     }
-  })
-  .then(data => {
-    fillingWeatherInfo(data.data);
-    unlockTabs();
-    openTab(0);
-  })
-  .catch(err => {
-    lockTabs();
-    addTemplate('empty');
-    errorMessage(err.message);
-    displayIcon('none');
-  })
-};
+  });
 
-const getCls = (temp = 0) => (temp - kelvin).toFixed(0);
+const getCls = (temp = 0) => (temp - 273.15).toFixed(0);
 
-const fillingWeatherInfo = weather => {
+const weatherDataDestructuring = weather => {
   let {
     name,
     main: { temp, temp_max, temp_min, humidity, pressure },
@@ -63,7 +69,7 @@ const fillingWeatherInfo = weather => {
   const getDate = d => 
     `${d.getUTCHours() + timezone}:${d.getUTCMinutes() + timezone}`;
   
-  results = [
+  return [
     [name],
     [main, `${temp}°`, `${temp_max}° / ${temp_min}°`, icon],
     ['Wind', speed, 'm / s', 'wind'],
@@ -75,13 +81,11 @@ const fillingWeatherInfo = weather => {
 
 const errorMessage = message => el('tabName').innerText = message;
 
-const lockTabs = () => {
-  openTab(0);
+const lockTabs = () =>
   Array.prototype.slice.call(tabs).map((tab) => tab.onclick = () => {});
-};
 
-const unlockTabs = () => 
-  Array.prototype.slice.call(tabs).map((tab, i) => tab.onclick = () => openTab(i));
+const unlockTabs = (data) =>
+  Array.prototype.slice.call(tabs).map((tab, i) => tab.onclick = () => openTab(i, data));
 
 const addTemplate = (data = 'empty') => {
   if (data === 'empty')
@@ -106,15 +110,6 @@ const displayIcon = mode => {
   }
 };
 
-let results =  [
-      [''],
-      ['', '', '', ''],
-      ['', '', '', ''],
-      ['', '', '', ''],
-      ['', '', '', ''],
-      ['', '', '', '']
-];
-let kelvin = 273.15;
 let APIkey = 'd3fb6b0837add2d07e9d69ef97b85afd';
 let activeTab = 1;
 let tabs = document.getElementsByClassName('tab');
